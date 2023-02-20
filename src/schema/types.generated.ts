@@ -185,12 +185,20 @@ export type DirectiveResolverFn<
   info: GraphQLResolveInfo
 ) => TResult | Promise<TResult>;
 
+// Updated 1: Make this UnionTypes to reuse.
+// We should add a config for `typescript-resolvers` to force non-nullable __typename i.e. { __typename: "BookResult" } and { __typename: "StandardError" } below
+export type UnionTypes = {
+  BookPayload:
+    | (BookResult & { __typename: "BookResult" })
+    | (StandardError & { __typename: "StandardError" });
+};
+
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
   Book: ResolverTypeWrapper<Book>;
   ID: ResolverTypeWrapper<Scalars["ID"]>;
   String: ResolverTypeWrapper<Scalars["String"]>;
-  BookPayload: ResolversTypes["BookResult"] | ResolversTypes["StandardError"];
+  BookPayload: ResolverTypeWrapper<UnionTypes["BookPayload"]>; // Updated 2: This forces Query.book to return __typename
   BookResult: ResolverTypeWrapper<BookResult>;
   DateTime: ResolverTypeWrapper<Scalars["DateTime"]>;
   ErrorType: ErrorType;
@@ -206,9 +214,7 @@ export type ResolversParentTypes = {
   Book: Book;
   ID: Scalars["ID"];
   String: Scalars["String"];
-  BookPayload:
-    | ResolversParentTypes["BookResult"]
-    | ResolversParentTypes["StandardError"];
+  BookPayload: UnionTypes["BookPayload"]; // Updated 3: This allows BookPayload.__resolveType to `return parent.__typename`
   BookResult: BookResult;
   DateTime: Scalars["DateTime"];
   Mutation: {};

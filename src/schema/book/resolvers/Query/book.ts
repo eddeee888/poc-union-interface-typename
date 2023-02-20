@@ -7,11 +7,13 @@ export const book: NonNullable<QueryResolvers["book"]> = (
   const book = data.books[id];
   if (!book) {
     return {
+      __typename: "StandardError",
       error: "NOT_FOUND",
     };
   }
 
   return {
+    __typename: "BookResult",
     result: book,
   };
 };
