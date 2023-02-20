@@ -1,5 +1,7 @@
 extend type Query {
   book(id: ID!): BookPayload!
+  bookResults: [BookResult!]! # Proves these do not need __typename
+  books: [Book!]! # Proves these do not need __typename
 }
 
 type Book {

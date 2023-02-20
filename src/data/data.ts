@@ -1,4 +1,4 @@
-import { BookMapper } from "src/schema/book/schema.mappers";
+import { Book } from "../schema/types.generated";
 import { UserMapper } from "../schema/user/schema.mappers";
 
 const createUser = (id: string): UserMapper => {
@@ -8,7 +8,7 @@ const createUser = (id: string): UserMapper => {
     lastName: `lastName${id}`,
   };
 };
-const createBook = (id: string): BookMapper => {
+const createBook = (id: string): Book => {
   return {
     id,
     isbn: `isbn${id}`,
@@ -17,7 +17,7 @@ const createBook = (id: string): BookMapper => {
 
 export const data: {
   users: Record<string, UserMapper>;
-  books: Record<string, BookMapper>;
+  books: Record<string, Book>;
   users_read_books: Record<string, [string, string]>;
 } = {
   users: {

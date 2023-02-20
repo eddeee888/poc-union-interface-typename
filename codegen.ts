@@ -12,6 +12,7 @@ const config: CodegenConfig = {
       presetConfig: {
         typesPluginsConfig: {
           contextType: "../index#ResolverContext",
+          nonOptionalTypename: false,
         },
       },
       plugins: [],

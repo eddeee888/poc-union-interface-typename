@@ -3,7 +3,6 @@ import {
   GraphQLScalarType,
   GraphQLScalarTypeConfig,
 } from "graphql";
-import { BookMapper } from "./book/schema.mappers";
 import { UserMapper } from "./user/schema.mappers";
 import { ResolverContext } from "../index";
 export type Maybe<T> = T | null;
@@ -17,7 +16,6 @@ export type MakeOptional<T, K extends keyof T> = Omit<T, K> & {
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
   [SubKey in K]: Maybe<T[SubKey]>;
 };
-export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 export type RequireFields<T, K extends keyof T> = Omit<T, K> & {
   [P in K]-?: NonNullable<T[P]>;
 };
@@ -32,7 +30,7 @@ export type Scalars = {
 };
 
 export type Book = {
-  __typename: "Book";
+  __typename?: "Book";
   id: Scalars["ID"];
   isbn: Scalars["String"];
 };
@@ -40,7 +38,7 @@ export type Book = {
 export type BookPayload = BookResult | StandardError;
 
 export type BookResult = {
-  __typename: "BookResult";
+  __typename?: "BookResult";
   result?: Maybe<Book>;
 };
 
@@ -51,12 +49,14 @@ export type ErrorType =
   | "UNEXPECTED_ERROR";
 
 export type Mutation = {
-  __typename: "Mutation";
+  __typename?: "Mutation";
 };
 
 export type Query = {
-  __typename: "Query";
+  __typename?: "Query";
   book: BookPayload;
+  bookResults: Array<BookResult>;
+  books: Array<Book>;
   user?: Maybe<User>;
 };
 
@@ -69,12 +69,12 @@ export type QueryUserArgs = {
 };
 
 export type StandardError = {
-  __typename: "StandardError";
+  __typename?: "StandardError";
   error: ErrorType;
 };
 
 export type User = {
-  __typename: "User";
+  __typename?: "User";
   booksRead: Array<Book>;
   fullName: Scalars["String"];
   id: Scalars["ID"];
@@ -187,13 +187,11 @@ export type DirectiveResolverFn<
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
-  Book: ResolverTypeWrapper<BookMapper>;
+  Book: ResolverTypeWrapper<Book>;
   ID: ResolverTypeWrapper<Scalars["ID"]>;
   String: ResolverTypeWrapper<Scalars["String"]>;
   BookPayload: ResolversTypes["BookResult"] | ResolversTypes["StandardError"];
-  BookResult: ResolverTypeWrapper<
-    Omit<BookResult, "result"> & { result?: Maybe<ResolversTypes["Book"]> }
-  >;
+  BookResult: ResolverTypeWrapper<BookResult>;
   DateTime: ResolverTypeWrapper<Scalars["DateTime"]>;
   ErrorType: ErrorType;
   Mutation: ResolverTypeWrapper<{}>;
@@ -205,15 +203,13 @@ export type ResolversTypes = {
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
-  Book: BookMapper;
+  Book: Book;
   ID: Scalars["ID"];
   String: Scalars["String"];
   BookPayload:
     | ResolversParentTypes["BookResult"]
     | ResolversParentTypes["StandardError"];
-  BookResult: Omit<BookResult, "result"> & {
-    result?: Maybe<ResolversParentTypes["Book"]>;
-  };
+  BookResult: BookResult;
   DateTime: Scalars["DateTime"];
   Mutation: {};
   Query: {};
@@ -270,6 +266,12 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QueryBookArgs, "id">
   >;
+  bookResults?: Resolver<
+    Array<ResolversTypes["BookResult"]>,
+    ParentType,
+    ContextType
+  >;
+  books?: Resolver<Array<ResolversTypes["Book"]>, ParentType, ContextType>;
   user?: Resolver<
     Maybe<ResolversTypes["User"]>,
     ParentType,

@@ -4,12 +4,19 @@ import { Book } from "./book/resolvers/Book";
 import { BookPayload } from "./book/resolvers/BookPayload";
 import { BookResult } from "./book/resolvers/BookResult";
 import { book as Query_book } from "./book/resolvers/Query/book";
+import { bookResults as Query_bookResults } from "./book/resolvers/Query/bookResults";
+import { books as Query_books } from "./book/resolvers/Query/books";
 import { user as Query_user } from "./user/resolvers/Query/user";
 import { StandardError } from "./base/resolvers/StandardError";
 import { User } from "./user/resolvers/User";
 import { DateTimeResolver } from "graphql-scalars";
 export const resolvers: Resolvers = {
-  Query: { book: Query_book, user: Query_user },
+  Query: {
+    book: Query_book,
+    bookResults: Query_bookResults,
+    books: Query_books,
+    user: Query_user,
+  },
 
   Book: Book,
   BookPayload: BookPayload,
