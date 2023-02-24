@@ -187,7 +187,7 @@ export type DirectiveResolverFn<
 
 // Updated 1: Make this UnionTypes to reuse.
 // We should add a config for `typescript-resolvers` to force non-nullable __typename i.e. { __typename: "BookResult" } and { __typename: "StandardError" } below
-export type UnionTypes = {
+export type ResolversUnionTypes = {
   BookPayload:
     | (BookResult & { __typename: "BookResult" })
     | (StandardError & { __typename: "StandardError" });
@@ -198,7 +198,7 @@ export type ResolversTypes = {
   Book: ResolverTypeWrapper<Book>;
   ID: ResolverTypeWrapper<Scalars["ID"]>;
   String: ResolverTypeWrapper<Scalars["String"]>;
-  BookPayload: ResolverTypeWrapper<UnionTypes["BookPayload"]>; // Updated 2: This forces Query.book to return __typename
+  BookPayload: ResolverTypeWrapper<ResolversUnionTypes["BookPayload"]>; // Updated 2: This forces Query.book to return __typename
   BookResult: ResolverTypeWrapper<BookResult>;
   DateTime: ResolverTypeWrapper<Scalars["DateTime"]>;
   ErrorType: ErrorType;
@@ -214,7 +214,7 @@ export type ResolversParentTypes = {
   Book: Book;
   ID: Scalars["ID"];
   String: Scalars["String"];
-  BookPayload: UnionTypes["BookPayload"]; // Updated 3: This allows BookPayload.__resolveType to `return parent.__typename`
+  BookPayload: ResolversUnionTypes["BookPayload"]; // Updated 3: This allows BookPayload.__resolveType to `return parent.__typename`
   BookResult: BookResult;
   DateTime: Scalars["DateTime"];
   Mutation: {};
